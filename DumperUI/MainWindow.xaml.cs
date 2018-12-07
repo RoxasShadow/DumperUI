@@ -26,9 +26,9 @@ namespace DumperUI
 
             InitializeProfileList();
 
-            this.url.Focus();
+            url.Focus();
 
-            this.Title = AppVersion();
+            Title = AppVersion();
             CreateLogFile();
         }
 
@@ -57,10 +57,10 @@ namespace DumperUI
                 .Where(profile => profile.Length > 0)
                 .ToArray();
 
-            this.profilesList.Items.Add("Auto");
+            profilesList.Items.Add("Auto");
 
             foreach (String profile in profiles) {
-                this.profilesList.Items.Add(profile);
+                profilesList.Items.Add(profile);
             }
 
             p.Dispose();
@@ -68,13 +68,12 @@ namespace DumperUI
 
         public async void StartDumpingBtn_Click(object sender, RoutedEventArgs e)
         {
-            String url = this.url.Text;
-            if(url.Length == 0)
+            if(url.Text.Length == 0)
             {
                 MessageBox.Show("URL is missing", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            else if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            else if (!Uri.IsWellFormedUriString(url.Text, UriKind.Absolute))
             {
                 MessageBox.Show("URL seems to be malformed", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -93,19 +92,19 @@ namespace DumperUI
 
             String parentDir = Directory.GetParent(dialog.FileName).FullName;
             if (Directory.Exists(parentDir)) {
-                this.latestSelectedFolder = parentDir;
+                latestSelectedFolder = parentDir;
             }
 
             CreateLogFile();
 
             String cmd = string.Join(" ", BuildCmd(dialog));
-            this.logBox.Text = "$> dumper " + cmd + "\n";
+            logBox.Text = "$> dumper " + cmd + "\n";
 
             InitializeFileWatcher();
 
             await Task.Factory.StartNew(() => StartDumping(cmd), TaskCreationOptions.LongRunning);
 
-            this.logBox.Focus();
+            logBox.Focus();
         }
 
         private void InitializeFileWatcher()
@@ -126,31 +125,31 @@ namespace DumperUI
             List<string> cmdBuilder = new List<string>(new string[]
             {
                 "--output", logFile,
-                "--url", string.Format("\"{0}\"", this.url.Text),
+                "--url", string.Format("\"{0}\"", url.Text),
                 "--path", string.Format("\"{0}\"", dialog.FileName)
             });
-            if (this.pageStart.Value > 1)
+            if (pageStart.Value > 1)
             {
                 cmdBuilder.Add("--from");
-                cmdBuilder.Add(this.pageStart.Value.ToString());
+                cmdBuilder.Add(pageStart.Value.ToString());
             }
-            if (this.pageEnd.Value > 1)
+            if (pageEnd.Value > 1)
             {
-                if(this.pageStart.Value == 1)
+                if(pageStart.Value == 1)
                 {
                     cmdBuilder.Add("--from");
                     cmdBuilder.Add("1");
                 }
 
                 cmdBuilder.Add("--to");
-                cmdBuilder.Add(this.pageEnd.Value.ToString());
+                cmdBuilder.Add(pageEnd.Value.ToString());
             }
-            if (this.profilesList.SelectedIndex > 0)
+            if (profilesList.SelectedIndex > 0)
             {
                 cmdBuilder.Add("--profile");
-                cmdBuilder.Add((string)this.profilesList.SelectedValue);
+                cmdBuilder.Add((string)profilesList.SelectedValue);
             }
-            if (this.threadsNum.Value > 1)
+            if (threadsNum.Value > 1)
             {
                 cmdBuilder.Add("--threads");
                 cmdBuilder.Add("1:" + threadsNum.Value);
@@ -182,11 +181,10 @@ namespace DumperUI
             {
                 startDumpingBtn.IsEnabled = true;
                 startDumpingBtn.Content = "Dump";
+                url.Focus();
             }));
 
             dumpingProcess.Dispose();
-
-            this.url.Focus();
         }
 
         private int lastReadLogLine = 0;
@@ -211,8 +209,8 @@ namespace DumperUI
                 lastReadLogLine = lines.Length;
                 context.Post(val =>
                 {
-                    this.logBox.AppendText(string.Join("\n\n", lines));
-                    this.logBox.ScrollToEnd();
+                    logBox.AppendText(string.Join("\n\n", lines));
+                    logBox.ScrollToEnd();
                     failedReadLogLineAttempts = 0;
                 }, source);
             }
