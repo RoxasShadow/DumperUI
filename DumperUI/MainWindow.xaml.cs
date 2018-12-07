@@ -123,7 +123,12 @@ namespace DumperUI
 
         private string BuildCmd(CommonFileDialog dialog)
         {
-            List<string> cmdBuilder = new List<string>(new string[] { "--output", logFile, "--url", this.url.Text, "--path", dialog.FileName });
+            List<string> cmdBuilder = new List<string>(new string[]
+            {
+                "--output", logFile,
+                "--url", string.Format("\"{0}\"", this.url.Text),
+                "--path", string.Format("\"{0}\"", dialog.FileName)
+            });
             if (this.pageStart.Value > 1)
             {
                 cmdBuilder.Add("--from");
