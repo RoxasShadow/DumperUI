@@ -104,6 +104,8 @@ namespace DumperUI
             InitializeFileWatcher();
 
             await Task.Factory.StartNew(() => StartDumping(cmd), TaskCreationOptions.LongRunning);
+
+            this.logBox.Focus();
         }
 
         private void InitializeFileWatcher()
@@ -178,6 +180,8 @@ namespace DumperUI
             }));
 
             dumpingProcess.Dispose();
+
+            this.url.Focus();
         }
 
         private int lastReadLogLine = 0;
