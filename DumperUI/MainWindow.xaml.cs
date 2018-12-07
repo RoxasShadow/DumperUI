@@ -4,11 +4,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace DumperUI
@@ -28,6 +27,14 @@ namespace DumperUI
             InitializeProfileList();
 
             this.url.Focus();
+
+            this.Title = AppVersion();
+            CreateLogFile();
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            DeleteLogFile();
         }
 
         private void InitializeProfileList() {
@@ -89,11 +96,10 @@ namespace DumperUI
                 this.latestSelectedFolder = parentDir;
             }
 
-            logFile = Path.GetTempPath() + "dumper-" + new Random().Next(900) + ".log"; // Guid.NewGuid().ToString()
-            File.Create(logFile);
+            CreateLogFile();
 
             String cmd = string.Join(" ", BuildCmd(dialog));
-            this.logBox.AppendText("$> dumper " + cmd + "\n");
+            this.logBox.Text = "$> dumper " + cmd + "\n";
 
             InitializeFileWatcher();
 
@@ -123,6 +129,12 @@ namespace DumperUI
             }
             if (this.pageEnd.Value > 1)
             {
+                if(this.pageStart.Value == 1)
+                {
+                    cmdBuilder.Add("--from");
+                    cmdBuilder.Add("1");
+                }
+
                 cmdBuilder.Add("--to");
                 cmdBuilder.Add(this.pageEnd.Value.ToString());
             }
@@ -207,6 +219,28 @@ namespace DumperUI
             p.StartInfo.FileName = "cmd.exe";
             p.StartInfo.Arguments = "/c dumper " + cmd + " 2>&1";
             return p;
+        }
+
+        private String AppVersion ()
+        {
+            string productVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            string productName = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductName;
+            return productName + " " + productVersion.Substring(0, productVersion.Length - 2);
+        }
+
+        private void DeleteLogFile ()
+        {
+            if (logFile != null && File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
+
+        private void CreateLogFile ()
+        {
+            DeleteLogFile();
+            logFile = Path.GetTempPath() + "dumper-" + new Random().Next(900) + ".log"; // Guid.NewGuid().ToString()
+            File.Create(logFile);
         }
     }
 }
