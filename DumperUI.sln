@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumperUI", "DumperUI\DumperUI.csproj", "{AF3E2B0D-B020-48F6-9B08-3E8582CD88AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF3E2B0D-B020-48F6-9B08-3E8582CD88AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF3E2B0D-B020-48F6-9B08-3E8582CD88AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF3E2B0D-B020-48F6-9B08-3E8582CD88AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF3E2B0D-B020-48F6-9B08-3E8582CD88AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D05AEDDC-FD74-4F47-9E72-26010E45DAD6}
+	EndGlobalSection
+EndGlobal
