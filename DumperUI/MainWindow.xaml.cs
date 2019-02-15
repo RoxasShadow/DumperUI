@@ -14,7 +14,8 @@ namespace DumperUI
 {
     public partial class MainWindow : Window
     {
-        private String latestSelectedFolder = null;
+        private String latestSelectedPath = null;
+        private String latestCreatedFolder;
         private String logFile;
         private SynchronizationContext context;
         private FileSystemWatcher watcher;
@@ -82,7 +83,7 @@ namespace DumperUI
             CommonOpenFileDialog dialog = new CommonOpenFileDialog
             {
                 IsFolderPicker = true,
-                InitialDirectory = latestSelectedFolder ?? Environment.GetFolderPath(Environment.SpecialFolder.MyPictures)
+                InitialDirectory = latestSelectedPath  ?? Environment.GetFolderPath(Environment.SpecialFolder.MyPictures)
             };
 
             if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
@@ -90,9 +91,10 @@ namespace DumperUI
                 return;
             }
 
+            latestCreatedFolder = dialog.FileName;
             String parentDir = Directory.GetParent(dialog.FileName).FullName;
             if (Directory.Exists(parentDir)) {
-                latestSelectedFolder = parentDir;
+                latestSelectedPath = parentDir;
             }
 
             CreateLogFile();
@@ -175,6 +177,7 @@ namespace DumperUI
         {
             watcher.Changed -= new FileSystemEventHandler(LogUpdated);
 
+            Process.Start(latestCreatedFolder);
             MessageBox.Show("Dump ended", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
             startDumpingBtn.Dispatcher.Invoke(new Action(() =>
