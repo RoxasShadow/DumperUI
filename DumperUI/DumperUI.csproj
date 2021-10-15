@@ -30,8 +30,8 @@
     <ErrorReportUrl>https://github.com/RoxasShadow/DumperUI</ErrorReportUrl>
     <ProductName>Dumper</ProductName>
     <PublisherName>Roxas Shadow</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.1.8.1</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.1.9.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
